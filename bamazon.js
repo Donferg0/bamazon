@@ -29,3 +29,13 @@ var table = function() {
         }
     })
 }
+
+var purchase = function() {
+    inquirer.prompt([{
+        type: 'input',
+        name: "choice",
+        message: "What can I help you with today?"
+    }]).then(function(answer) {
+        
+    })
+}
