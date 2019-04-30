@@ -24,6 +24,8 @@ connection.connect(function(err) {
 var table = function() {
     connection.query("SELECT *  FROM products", function(err, res) {
         if (err) throw err
+        console.log("Welcome! Please let us assist you!")
+        console.log("-------------------------------")
         for  (var i = 0; i < res.length; i++) {
             console.log(res[i].product + " || " + res[i].department + " || " + res[i].price + "\n")
         }
@@ -36,6 +38,6 @@ var purchase = function() {
         name: "choice",
         message: "What can I help you with today?"
     }]).then(function(answer) {
-        
+
     })
 }
