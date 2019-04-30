@@ -16,7 +16,16 @@ var connection = mysql.createConnection({
   database: "bamazon_db"
 });
 
-con.connect(function(err) {
+connection.connect(function(err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId);
+    table();
 });
+
+var table = function() {
+    connection.query("SELECT *  FROM products", function(err, res) {
+        if (err) throw err
+        for  (var i = 0; i < res.length; i++) {
+            console.log(res[i].product + " || " + res[i].department + " || " + res[i].price + "\n")
+        }
+    })
+}
