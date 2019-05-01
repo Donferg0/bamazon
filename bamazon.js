@@ -2,6 +2,8 @@ var inquirer = require('inquirer');
 
 var mysql = require('mysql');
 
+var Table = require("cli-table");
+
 var connection = mysql.createConnection({
   host: "localhost",
 
@@ -21,23 +23,43 @@ connection.connect(function(err) {
     table();
 });
 
-var table = function() {
-    connection.query("SELECT *  FROM products", function(err, res) {
-        if (err) throw err
-        console.log("Welcome! Please let us assist you!")
-        console.log("-------------------------------")
-        for  (var i = 0; i < res.length; i++) {
-            console.log(res[i].product + " || " + res[i].department + " || " + res[i].price + "\n")
-        }
-    })
+var table = function(){
+    connection.query("SELECT * FROM products", function(err, res) {
+		if(err) throw err;
+		var makeTable = new Table ({
+			head: ["Item ID", "Product Name", "Catergory", "Price", "Quantity"],
+		});
+		for(var i = 0; i < res.length; i++){
+			makeTable.push(
+				[res[i].id,res[i].product, res[i].department, res[i].price, res[i].quantity]
+				);
+		}
+		console.log(makeTable.toString());
+		purchase(res);
+	});
 }
 
 var purchase = function() {
-    inquirer.prompt([{
-        type: 'input',
-        name: "choice",
-        message: "What can I help you with today?"
-    }]).then(function(answer) {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: "choice",
+            message: "What would you like to purchase today?",
+        },
+        {
+            type: 'input',
+            name: 'amount',
+            message: "How many would you like?",
+            validate: function(value) {
+                if (isNaN(value) === false) {
+                    return true;
+                } else {
+                    return false
+                }
+            }
 
+        }]).then(function(answer) {
+            console.log(answer)
     })
 }
+
