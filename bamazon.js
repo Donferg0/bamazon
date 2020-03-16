@@ -45,19 +45,6 @@ var purchase = function(res) {
             type: 'input',
             name: "choice",
             message: "What would you like to purchase today? [Quit with Q]",
-        },
-        {
-            type: 'input',
-            name: 'amount',
-            message: "How many would you like?",
-            validate: function(value) {
-                if (isNaN(value) === false) {
-                    return true;
-                } else {
-                    return false
-                }
-            }
-
         }]).then(function(answer) {
             var correct = false;
             for(var i = 0; i < res.length; i++){
@@ -65,6 +52,29 @@ var purchase = function(res) {
                     correct = true;
                     var product = answer.choice;
                     var id = i;
+                    inquirer.prompt({
+                        type: 'input',
+                        name: "quant",
+                        message: "How many would you like to buy?",
+                        validate: function(value) {
+                            if (isNaN(value) === false) {
+                                return true;
+                            } else {
+                                return false
+                            }
+                        }
+                    }).then(function(answer){
+                        if((res[id].quantity - answer.quant) > 0){
+                            connection.query("UPDATE products SET quantity='"+ (res[id].quantity - answer.quant) + "' WHERE product='"+ product +"'", function(err, res2){
+                                console.log("Product Bought!");
+                                table();
+                            })
+                        } else {
+                            console.log("We do not have that item!");
+                            purchase(res);
+                        }
+
+                    })
                 }
             }
             
