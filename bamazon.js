@@ -39,12 +39,12 @@ var table = function(){
 	});
 }
 
-var purchase = function() {
+var purchase = function(res) {
     inquirer.prompt([
         {
             type: 'input',
             name: "choice",
-            message: "What would you like to purchase today?",
+            message: "What would you like to purchase today? [Quit with Q]",
         },
         {
             type: 'input',
@@ -59,7 +59,15 @@ var purchase = function() {
             }
 
         }]).then(function(answer) {
-            console.log(answer)
+            var correct = false;
+            for(var i = 0; i < res.length; i++){
+                if(res[i].product == answer.choice){
+                    correct = true;
+                    var product = answer.choice;
+                    var id = i;
+                }
+            }
+            
     })
 }
 
