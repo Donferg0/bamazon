@@ -47,6 +47,9 @@ var purchase = function(res) {
             message: "What would you like to purchase today? [Quit with Q]",
         }]).then(function(answer) {
             var correct = false;
+            if(answer.choice.toUpperCase() == "Q"){
+                process.exit();
+            }
             for(var i = 0; i < res.length; i++){
                 if(res[i].product == answer.choice){
                     correct = true;
@@ -70,14 +73,17 @@ var purchase = function(res) {
                                 table();
                             })
                         } else {
-                            console.log("We do not have that item!");
+                            console.log("We do not have much, I apologize!");
                             purchase(res);
                         }
 
                     })
                 }
             }
-            
+            if(i === res.length && correct == false){
+                console.log("We do not have that item!");
+                purchase(res);
+        }    
     })
 }
 
